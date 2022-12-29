@@ -1,34 +1,24 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+import { Inter } from "@next/font/google";
+import { cookies } from "next/headers";
+import Image from "next/image";
+import styles from "./page.module.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Home({ token }: any) {
+  const nextCookies = cookies();
+  console.log(nextCookies.get("INSIGHT")?.value);
+  console.log(nextCookies.get("TOKEN")?.value);
+  //console.log(jwt.verify(nextCookies.get("TOKEN")?.value, "example_key"));
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+        <h1>
+          {nextCookies.has("INSIGHT") && nextCookies.get("INSIGHT")?.value
+            ? "Authorized User"
+            : "Not a Authorized User"}
+        </h1>
+        <h1>{token}</h1>
       </div>
 
       <div className={styles.center}>
@@ -87,5 +77,13 @@ export default function Home() {
         </a>
       </div>
     </main>
-  )
+  );
+}
+
+export async function getInitialProps(context: any) {
+  const nextCookies = cookies();
+  console.log(nextCookies.get("INSIGHT")?.value);
+  return {
+    props: { token: nextCookies.get("INSIGHT")?.value || "some" }, // will be passed to the page component as props
+  };
 }
