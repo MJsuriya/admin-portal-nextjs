@@ -79,11 +79,3 @@ export default function Home({ token }: any) {
     </main>
   );
 }
-
-export async function getInitialProps(context: any) {
-  const nextCookies = cookies();
-  console.log(nextCookies.get("INSIGHT")?.value);
-  return {
-    props: { token: nextCookies.get("INSIGHT")?.value || "some" }, // will be passed to the page component as props
-  };
-}
